@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Headless Playwright renderer.  Usage: ./pw <url> [options]   (see README.md / --help via no args)
+# Builds the image on first use. Each call is a fresh, stateless container, so calls
+# can run in parallel. Relative --screenshot paths land in the current directory.
+set -euo pipefail
+
+IMAGE="playwright-for-claude"
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [ "${PW_REBUILD:-0}" = "1" ] || ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
+  echo "Building $IMAGE image (one-time; downloads Chromium)..." >&2
+  docker build -t "$IMAGE" "$DIR" >&2
+fi
+
+exec docker run --rm --init \
+  -v "$PWD:/work" -w /work \
+  "$IMAGE" "$@"

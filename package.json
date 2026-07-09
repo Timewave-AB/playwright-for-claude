@@ -1,0 +1,10 @@
+{
+  "name": "playwright-for-claude",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Headless Playwright renderer for scraping JS/SPA pages from the CLI.",
+  "type": "commonjs",
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}
